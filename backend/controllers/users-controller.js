@@ -62,7 +62,7 @@ const login = async (req, res, next) => {
         return next(new HttpError("Wrong password", 401));
     }
 
-    res.json({message: "Logged in"});
+    res.json({message: "Logged in", user: existingUser.toObject({getters: true})});
 };
 
 module.exports = {getUsers, signup, login};
