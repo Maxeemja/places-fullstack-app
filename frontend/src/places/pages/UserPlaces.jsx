@@ -22,7 +22,7 @@ const UserPlaces = () => {
 			} catch (error) {}
 		};
 		getPlaces();
-	}, [sendRequest]);
+	}, [sendRequest, userId]);
 
 	const onClear = () => {
 		clearError();
