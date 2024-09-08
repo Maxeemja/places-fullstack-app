@@ -1,41 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
+import { useHttp } from '../../shared/hooks/http-hook';
 import PlaceList from '../components/PlaceList';
-
-const DUMMY_PLACES = [
-  {
-    id: 'p1',
-    title: 'Empire State Building',
-    description: 'One of the most famous sky scrapers in the world!',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-    address: '20 W 34th St, New York, NY 10001',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584
-    },
-    creator: 'u1'
-  },
-  {
-    id: 'p2',
-    title: 'Emp. State Building',
-    description: 'One of the most famous sky scrapers in the world!',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
-    address: '20 W 34th St, New York, NY 10001',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584
-    },
-    creator: 'u2'
-  }
-];
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const UserPlaces = () => {
-  const userId = useParams().userId;
-  const loadedPlaces = DUMMY_PLACES.filter(place => place.creator === userId);
-  return <PlaceList items={loadedPlaces} />;
+	const { isLoading, sendRequest, error, clearError } = useHttp();
+	const [places, setPlaces] = useState([]);
+	const userId = useParams().userId;
+	const history = useHistory();
+
+	useEffect(() => {
+		const getPlaces = async () => {
+			try {
+				const data = await sendRequest(
+					`http://localhost:5000/api/places/user/${userId}`
+				);
+				setPlaces(data.places);
+			} catch (error) {}
+		};
+		getPlaces();
+	}, [sendRequest]);
+
+	const onClear = () => {
+		clearError();
+		history.push('/');
+	};
+
+	return (
+		<>
+			<ErrorModal error={error} onClear={onClear} />
+			{isLoading && <LoadingSpinner />}
+			{!isLoading && !!places.length && <PlaceList items={places} />}
+		</>
+	);
 };
 
 export default UserPlaces;
