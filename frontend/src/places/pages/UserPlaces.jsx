@@ -29,11 +29,19 @@ const UserPlaces = () => {
 		history.push('/');
 	};
 
+	const placeDeletedHandler = (deletedPlaceId) => {
+		setPlaces((places) =>
+			places.filter((place) => place.id !== deletedPlaceId)
+		);
+	};
+
 	return (
 		<>
 			<ErrorModal error={error} onClear={onClear} />
 			{isLoading && <LoadingSpinner />}
-			{!isLoading && !!places.length && <PlaceList items={places} />}
+			{!isLoading && !!places.length && (
+				<PlaceList items={places} onDeletePlace={placeDeletedHandler} />
+			)}
 		</>
 	);
 };
