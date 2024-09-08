@@ -7,14 +7,12 @@ import Map from '../../shared/components/UIElements/Map';
 import { AuthContext } from '../../shared/context/auth-context';
 import './PlaceItem.css';
 import { useHttp } from '../../shared/hooks/http-hook';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const PlaceItem = (props) => {
 	const auth = useContext(AuthContext);
 	const [showMap, setShowMap] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const { sendRequest } = useHttp();
-	const history = useHistory();
 
 	const openMapHandler = () => setShowMap(true);
 
@@ -88,11 +86,11 @@ const PlaceItem = (props) => {
 						<Button inverse onClick={openMapHandler}>
 							VIEW ON MAP
 						</Button>
-						{auth.isLoggedIn && (
+						{auth.userId === props.creatorId && (
 							<Button to={`/places/${props.id}`}>EDIT</Button>
 						)}
 
-						{auth.isLoggedIn && (
+						{auth.userId === props.creatorId && (
 							<Button danger onClick={showDeleteWarningHandler}>
 								DELETE
 							</Button>
