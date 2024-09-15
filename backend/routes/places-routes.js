@@ -15,9 +15,9 @@ router.get('/', getPlaces);
 
 router.get('/:pid', getPlaceById);
 
-router.use(checkAuth);
-
 router.get('/user/:uid', getPlacesByUserId);
+
+router.use(checkAuth);
 
 router.post('/', createPlace);
 
