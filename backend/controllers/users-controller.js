@@ -82,10 +82,6 @@ const login = async (req, res, next) => {
 		return next(new HttpError('User not exist', 500));
 	}
 
-	if (existingUser && existingUser.password !== password) {
-		return next(new HttpError('Wrong password', 401));
-	}
-
 	let isValidPassword = false;
 	try {
 		isValidPassword = await bcrypt.compare(password, existingUser.password);

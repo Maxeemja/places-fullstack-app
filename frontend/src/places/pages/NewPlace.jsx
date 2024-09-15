@@ -15,7 +15,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { useHistory } from 'react-router-dom';
 
 const NewPlace = () => {
-	const { userId } = useContext(AuthContext);
+	const { userId, token } = useContext(AuthContext);
 	const { isLoading, error, sendRequest, clearError } = useHttp();
 	const [formState, inputHandler] = useForm(
 		{
@@ -49,7 +49,7 @@ const NewPlace = () => {
 					address: formState.inputs.address.value,
 					creator: userId
 				}),
-				{ 'Content-Type': 'application/json' }
+				{ 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }
 			);
 			history.push('/');
 		} catch (e) {}
